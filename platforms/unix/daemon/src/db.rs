@@ -48,13 +48,23 @@ pub fn select_seconds_data(conn: &Connection) -> Vec<HardwareInfo> {
         })
         .expect("Failed to query seconds data");
 
-    let mut result: Vec<HardwareInfo> = rows
-        .map(|row| {
-            let row = row.expect("Failed to get row");
-            serde_json::from_str::<HardwareInfo>(&row.data)
-                .expect("Failed to deserialize HardwareInfo")
-        })
-        .collect();
+//    let mut result: Vec<HardwareInfo> = rows
+//        .map(|row| {
+//            let row = row.expect("Failed to get row");
+//            serde_json::from_str::<HardwareInfo>(&row.data)
+//                .expect("Failed to deserialize HardwareInfo")
+//        })
+//        .collect();
+
+	let mut result: Vec<HardwareInfo> = rows
+	    .filter_map(|row| {
+	        // ok() converts a Result to an Option, so we skip the row if it's bad
+	        let row = row.ok()?; 
+	        // We attempt to deserialize; if it fails (due to a null), .ok() returns None
+	        // and filter_map silently discards this specific entry
+	        serde_json::from_str::<HardwareInfo>(&row.data).ok()
+	    })
+	    .collect();
 
     result.reverse();
     return result;
@@ -72,13 +82,23 @@ pub fn select_minutes_data(conn: &Connection) -> Vec<HardwareInfo> {
         })
         .expect("Failed to query seconds data");
 
-    let mut result: Vec<HardwareInfo> = rows
-        .map(|row| {
-            let row = row.expect("Failed to get row");
-            serde_json::from_str::<HardwareInfo>(&row.data)
-                .expect("Failed to deserialize HardwareInfo")
-        })
-        .collect();
+//    let mut result: Vec<HardwareInfo> = rows
+//        .map(|row| {
+//            let row = row.expect("Failed to get row");
+//            serde_json::from_str::<HardwareInfo>(&row.data)
+//                .expect("Failed to deserialize HardwareInfo")
+//        })
+//        .collect();
+
+	let mut result: Vec<HardwareInfo> = rows
+	    .filter_map(|row| {
+	        // ok() converts a Result to an Option, so we skip the row if it's bad
+	        let row = row.ok()?; 
+	        // We attempt to deserialize; if it fails (due to a null), .ok() returns None
+	        // and filter_map silently discards this specific entry
+	        serde_json::from_str::<HardwareInfo>(&row.data).ok()
+	    })
+	    .collect();
 
     result.reverse();
     return result;
