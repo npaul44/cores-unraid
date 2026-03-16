@@ -52,9 +52,13 @@ pub struct Data {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoresSensor {
     pub name: String,
-    pub value: f64,
-    pub min: f64,
-    pub max: f64,
+//    pub value: f64,
+//    pub min: f64,
+//    pub max: f64,
+    pub value: Option<f64>,
+    pub min: Option<f64>,
+    pub max: Option<f64>,
+
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -62,7 +66,8 @@ pub struct CoresSensor {
 pub struct CoresCPUInfo {
     pub manufacturer_name: String,
     pub socket_designation: String,
-    pub current_speed: f64,
+//    pub current_speed: f64,
+    pub current_speed: Option<f64>,
     pub core_count: u32,
     pub thread_count: u32,
 }
@@ -72,7 +77,8 @@ pub struct CoresCPUInfo {
 pub struct CoresCPU {
     pub name: String,
     pub info: Vec<CoresCPUInfo>,
-    pub max_load: f64,
+//    pub max_load: f64,
+	pub max_load: Option<f64>,
     pub load: Vec<CoresSensor>,
     pub clock: Vec<CoresSensor>,
     pub temperature: Vec<CoresSensor>,
@@ -86,7 +92,8 @@ pub struct CoresGPUCard {
     pub name: String,
     pub temperature: Vec<CoresSensor>,
     pub memory: Vec<CoresSensor>,
-    pub max_load: f64,
+//    pub max_load: f64,
+	pub max_load: Option<f64>,
     pub load: Vec<CoresSensor>,
     pub clock: Vec<CoresSensor>,
     pub power: Vec<CoresSensor>,
@@ -127,10 +134,14 @@ pub struct CoresDisk {
     pub name: String,
     pub total_space: u64,
     pub free_space: u64,
-    pub throughput_read: f64,
-    pub throughput_write: f64,
-    pub data_read: f64,
-    pub data_written: f64,
+//    pub throughput_read: f64,
+//    pub throughput_write: f64,
+//    pub data_read: f64,
+//    pub data_written: f64,
+    pub throughput_read: Option<f64>,
+    pub throughput_write: Option<f64>,
+    pub data_read: Option<f64>,
+    pub data_written: Option<f64>,
     pub temperature: CoresSensor,
     pub health: String,
     pub read_sectors: usize,
