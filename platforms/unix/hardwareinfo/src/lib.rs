@@ -58,7 +58,6 @@ pub struct CoresSensor {
     pub value: Option<f64>,
     pub min: Option<f64>,
     pub max: Option<f64>,
-
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -295,7 +294,8 @@ impl HardwareInfo {
             },
             cpu: CoresCPU {
                 name: "N/A".to_string(),
-                max_load: 0.0,
+//                max_load: 0.0,
+				max_load: Some(0.0),				
                 load: Vec::new(),
                 clock: Vec::new(),
                 temperature: Vec::new(),
@@ -352,9 +352,12 @@ impl CoresSensor {
     pub fn default() -> CoresSensor {
         CoresSensor {
             name: "N/A".to_string(),
-            value: 0.0,
-            min: 0.0,
-            max: 0.0,
+//            value: 0.0,
+//            min: 0.0,
+//            max: 0.0,
+			value: Some(0.0), // Wrapped in Some()
+            min: Some(0.0),   // Wrapped in Some()
+            max: Some(0.0),   // Wrapped in Some()
         }
     }
 }
@@ -369,25 +372,37 @@ impl CoresGPUCard {
             load: Vec::new(),
             memory: Vec::new(),
             power: Vec::new(),
-            max_load: 0.0,
+//            max_load: 0.0,
+			max_load: Some(0.0),
         }
     }
 }
 
 fn compare_sensor(prev_sensor: &CoresSensor, value: f64) -> CoresSensor {
+//    return CoresSensor {
+//        name: prev_sensor.name.clone(),
+//        value,
+//        min: if value < prev_sensor.min {
+//            value
+//        } else {
+//            prev_sensor.min
+//        },
+//        max: if value > prev_sensor.max {
+//            value
+//        } else {
+//            prev_sensor.max
+//        },
+//    };
+//
+// We unwrap the previous values. If they were somehow None, we use the current value as the new baseline.
+    let prev_min = prev_sensor.min.unwrap_or(value);
+    let prev_max = prev_sensor.max.unwrap_or(value);
+
     return CoresSensor {
         name: prev_sensor.name.clone(),
-        value,
-        min: if value < prev_sensor.min {
-            value
-        } else {
-            prev_sensor.min
-        },
-        max: if value > prev_sensor.max {
-            value
-        } else {
-            prev_sensor.max
-        },
+        value: Some(value),
+        min: Some(if value < prev_min { value } else { prev_min }),
+        max: Some(if value > prev_max { value } else { prev_max }),
     };
 }
 
